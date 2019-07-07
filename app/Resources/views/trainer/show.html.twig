@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Trainer</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Email</th>
+                <td>{{ trainer.email }}</td>
+            </tr>
+            <tr>
+                <th>Isactive</th>
+                <td>{% if trainer.isActive %}Yes{% else %}No{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Nbpieces</th>
+                <td>{{ trainer.nbPieces }}</td>
+            </tr>
+            <tr>
+                <th>Password</th>
+                <td>{{ trainer.password }}</td>
+            </tr>
+            <tr>
+                <th>Starterid</th>
+                <td>{{ trainer.starterId }}</td>
+            </tr>
+            <tr>
+                <th>Username</th>
+                <td>{{ trainer.username }}</td>
+            </tr>
+            <tr>
+                <th>Id</th>
+                <td>{{ trainer.id }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('trainer_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('trainer_edit', { 'id': trainer.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

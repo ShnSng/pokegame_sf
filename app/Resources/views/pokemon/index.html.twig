@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Pokemons list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Avendre</th>
+                <th>Datedernierentrainement</th>
+                <th>Dresseurid</th>
+                <th>Niveau</th>
+                <th>Prix</th>
+                <th>Refpokemonid</th>
+                <th>Sexe</th>
+                <th>Xp</th>
+                <th>Id</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for pokemon in pokemons %}
+            <tr>
+                <td><a href="{{ path('pokemon_show', { 'id': pokemon.id }) }}">{{ pokemon.aVendre }}</a></td>
+                <td>{{ pokemon.dateDernierEntrainement }}</td>
+                <td>{{ pokemon.dresseurId }}</td>
+                <td>{{ pokemon.niveau }}</td>
+                <td>{{ pokemon.prix }}</td>
+                <td>{{ pokemon.refPokemonId }}</td>
+                <td>{{ pokemon.sexe }}</td>
+                <td>{{ pokemon.xp }}</td>
+                <td>{{ pokemon.id }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('pokemon_show', { 'id': pokemon.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('pokemon_edit', { 'id': pokemon.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('pokemon_new') }}">Create a new pokemon</a>
+        </li>
+    </ul>
+{% endblock %}

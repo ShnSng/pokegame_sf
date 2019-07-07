@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Refelementarytype</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Libelle</th>
+                <td>{{ refElementaryType.libelle }}</td>
+            </tr>
+            <tr>
+                <th>Id</th>
+                <td>{{ refElementaryType.id }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('refelementarytype_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('refelementarytype_edit', { 'id': refElementaryType.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

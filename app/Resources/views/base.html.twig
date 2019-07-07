@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>Pokegame - {% block title %}{% endblock %}</title>
+        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+        <link rel="stylesheet" type="text/css" href="{{ asset('css/all.min.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ asset('css/bulma.min.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ asset('css/custom.css') }}">
+        {% block stylesheets %}{% endblock %}
+    </head>
+    <body>
+        {% include 'header.html.twig' %}
+        {% include 'alert.html.twig' %}
+        {% block body %}{% endblock %}
+        {% include 'footer.html.twig' %}
+        <script type="text/javascript" src="{{ asset('js/script.js') }}"></script>
+        {% block javascripts %}{% endblock %}
+    </body>
+</html>

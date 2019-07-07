@@ -1,0 +1,130 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Ajout
+{% endblock %}
+
+{% block body %}
+    <div class="content">
+        <section class="hero is-bold is-info">
+            <div class="hero-body">
+                <div class="container">
+                <h1 class="title">Ajout</h1>
+                <h2 class="subtitle">Ajoutez un nouveau Pokemon au Pokedex en remplissant ce formulaire</h2>
+                </div>
+            </div>
+        </section>
+        <div class="container">
+            <div class="card">
+                {{ form_start(form) }}
+                    <div class="card-content">
+                        <div class="content">
+                            <div class="field is-horizontal">
+                                <div class="field-label is-normal">
+                                    {{ form_label(form.nom, "Nom", {'label_attr': {'class': 'label'}}) }}
+                                </div>
+                                <div class="field-body">
+                                    <div class="field">
+                                        <p class="control">
+                                            {{ form_widget(form.nom, {'attr': {'class': 'input'}}) }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="field is-horizontal">
+                                <div class="field-label is-normal">
+                                    {{ form_label(form.type1, "Type 1", {'label_attr': {'class': 'label'}}) }}
+                                </div>
+                                <div class="field-body">
+                                    <div class="field">
+                                        <p class="control is-expanded">
+                                            <span class="select is-fullwidth">
+                                                {{ form_widget(form.type1, {'attr': {'class': 'input'}}) }}
+                                            </span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="field is-horizontal">
+                                <div class="field-label is-normal">
+                                    {{ form_label(form.type2, "Type 2", {'label_attr': {'class': 'label'}}) }}
+                                </div>
+                                <div class="field-body">
+                                    <div class="field">
+                                        <p class="control is-expanded">
+                                            <span class="select is-fullwidth">
+                                                {{ form_widget(form.type2, {'attr': {'class': 'input'}}) }}
+                                            </span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="field is-horizontal">
+                                <div class="field-label is-normal">
+                                    {{ form_label(form.typeCourbeNiveau, "Type courbe de niveau", {'label_attr': {'class': 'label'}}) }}
+                                </div>
+                                <div class="field-body">
+                                    <div class="field">
+                                        <p class="control is-expanded">
+                                            <span class="select is-fullwidth">
+                                                {{ form_widget(form.typeCourbeNiveau, {'attr': {'class': 'input'}}) }}
+                                            </span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="field is-horizontal">
+                                <div class="field-label">
+                                    <label class="label">Evolution ?</label>
+                                </div>
+                                <div class="field-body">
+                                    <div class="field is-narrow">
+                                        <div class="control">
+                                            <label class="radio">
+                                                <input type="radio" name="isEvo" value="1">
+                                                Oui
+                                            </label>
+                                            <label class="radio">
+                                                <input type="radio" name="isEvo" value="0" checked="checked">
+                                                Non
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="field is-horizontal">
+                                <div class="field-label">
+                                    <label class="label">Starter ?</label>
+                                </div>
+                                <div class="field-body">
+                                    <div class="field is-narrow">
+                                        <div class="control">
+                                            <label class="radio">
+                                                <input type="radio" name="isStarter" value="1">
+                                                Oui
+                                            </label>
+                                            <label class="radio">
+                                                <input type="radio" name="isStarter" value="0" checked="checked">
+                                                Non
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="field is-horizontal">
+                                <div class="field-label"></div>
+                                <div class="field-body">
+                                    <div class="field">
+                                        <div class="control">
+                                            <button type="submit" class="button is-primary">Ajouter</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Détails
+{% endblock %}
+
+{% block body %}
+    <div class="content">
+        <section class="hero is-bold is-light">
+            <div class="hero-body">
+                <div class="container">
+                    <h1 class="title">Détails</h1>
+                    <h2 class="subtitle">Apprenez en plus sur le pokemon sélectionné</h2>
+                </div>
+            </div>
+        </section>
+        <div class="container">
+            <div class="card">
+                <div class="card-content">
+                    <p>ID : {{ refPokemon.id }}</p>
+                    <p>Nom : {{ refPokemon.nom }}</p>
+                    <p>Type : {{ refPokemon.type }}</p>
+                    <p>{{ (refPokemon.evolution) ? 'est une évolution' : 'est un Pokemon de base' }}</p>
+                    <p class="btn-delete"><a href="{{ path('refpokemon_delete', { id: refPokemon.id }) }}" class="button is-warning">Supprimer</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

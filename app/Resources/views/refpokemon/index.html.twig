@@ -1,0 +1,69 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Pokedex
+{% endblock %}
+
+{% block body %}
+    <div class="content">
+    <section class="hero is-bold is-danger">
+        <div class="hero-body">
+            <div class="container">
+                <h1 class="title">Pokedex</h1>
+                <h2 class="subtitle">Consultez la liste des pokemons</h2>
+                <div class="field is-grouped is-grouped-multiline">
+                    <div class="control">
+                        <div class="tags has-addons">
+                            <span class="tag is-dark">{{ nbPokemons|default("0") }}</span>
+                            <span class="tag is-light">Pokemon(s)</span>
+                        </div>
+                    </div>
+                    <div class="control">
+                        <div class="tags has-addons">
+                            <span class="tag is-dark">{{ nbBases|default("0") }}</span>
+                            <span class="tag is-light">base(s)</span>
+                        </div>
+                    </div>
+                    <div class="control">
+                        <div class="tags has-addons">
+                            <span class="tag is-dark">{{ nbEvos|default("0") }}</span>
+                            <span class="tag is-light">évolution(s)</span>
+                        </div>
+                    </div>
+                    <a href="{{ path('refpokemon_new') }}" class="control btn-new">
+                        <div class="tags has-addons"><span class="tag is-light">Ajouter</span></div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div class="container">
+        {% if pokemons is defined %}
+            {% if pokemons is not empty %}
+                <table class="table is-hoverable">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nom</th>
+                            <th>Type</th>
+                            <th>Supprimer</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for pkm in pokemons %}
+                            <tr>
+                                <td>{{ pkm.id }}</td>
+                                <td><a href="{{ path('refpokemon_show', { id: pkm.id }) }}">{{ pkm.nom }}</a></td>
+                                <td>{{ pkm.type }}</td>
+                                <td><a href="{{ path('refpokemon_delete', { id: pkm.id }) }}" class="button is-warning">Supprimer</a></td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p>Votre Pokedex est vide</p>
+            {% endif %}
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

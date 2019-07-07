@@ -1,0 +1,6 @@
+<div class="notification {{ (status is defined and status is not null) ? 'show ' ~ status : 'hide' }}">
+    <button class="delete"></button>
+    {% if message is defined and message is not null %}
+        {{ message }}
+    {% endif %}
+</div>

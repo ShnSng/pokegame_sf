@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Refplaces list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Label</th>
+                <th>Id</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for refPlace in refPlaces %}
+            <tr>
+                <td><a href="{{ path('refplace_show', { 'id': refPlace.id }) }}">{{ refPlace.label }}</a></td>
+                <td>{{ refPlace.id }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('refplace_show', { 'id': refPlace.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('refplace_edit', { 'id': refPlace.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('refplace_new') }}">Create a new refPlace</a>
+        </li>
+    </ul>
+{% endblock %}

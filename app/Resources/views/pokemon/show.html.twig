@@ -1,0 +1,60 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Pokemon</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Avendre</th>
+                <td>{% if pokemon.aVendre %}Yes{% else %}No{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Datedernierentrainement</th>
+                <td>{{ pokemon.dateDernierEntrainement }}</td>
+            </tr>
+            <tr>
+                <th>Dresseurid</th>
+                <td>{{ pokemon.dresseurId }}</td>
+            </tr>
+            <tr>
+                <th>Niveau</th>
+                <td>{{ pokemon.niveau }}</td>
+            </tr>
+            <tr>
+                <th>Prix</th>
+                <td>{{ pokemon.prix }}</td>
+            </tr>
+            <tr>
+                <th>Refpokemonid</th>
+                <td>{{ pokemon.refPokemonId }}</td>
+            </tr>
+            <tr>
+                <th>Sexe</th>
+                <td>{{ pokemon.sexe }}</td>
+            </tr>
+            <tr>
+                <th>Xp</th>
+                <td>{{ pokemon.xp }}</td>
+            </tr>
+            <tr>
+                <th>Id</th>
+                <td>{{ pokemon.id }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('pokemon_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('pokemon_edit', { 'id': pokemon.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Refelementarytypes list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Libelle</th>
+                <th>Id</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for refElementaryType in refElementaryTypes %}
+            <tr>
+                <td><a href="{{ path('refelementarytype_show', { 'id': refElementaryType.id }) }}">{{ refElementaryType.libelle }}</a></td>
+                <td>{{ refElementaryType.id }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('refelementarytype_show', { 'id': refElementaryType.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('refelementarytype_edit', { 'id': refElementaryType.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('refelementarytype_new') }}">Create a new refElementaryType</a>
+        </li>
+    </ul>
+{% endblock %}
