@@ -25,41 +25,47 @@ class RefPokemonController extends Controller
      */
     public function indexAction(Request $request)
     {
-        $pokemons = $this->getDoctrine()->getRepository('AppBundle:RefPokemon')->findAll();
-        $context = array();
-        foreach($pokemons as $pkm) {
-            $data = array(
-                'id' => $pkm->getId(),
-                'nom' => $pkm->getNom()
-            );
-            $type = ucfirst($pkm->getType1()->getLibelle());
-            try {
-                $data['type'] = $type . ' - ' . ucfirst($pkm->getType2()->getLibelle());
-            } catch (\Exception $e) {
-                if ($e instanceof EntityNotFoundException) { // type2 does not exist
-                    $data['type'] = $type;
-                }
-            }
-            array_push($context, $data);
-        }
-        $nbPokemons = count($context);
-        $nbBases =  $this->getDoctrine()->getRepository('AppBundle:RefPokemon')->findByEvolution(false);
         $session = $request->getSession();
-        $status = $session->get("status", null);
-        $context = array(
-            'pokemons' => $context,
-            'nbPokemons' => $nbPokemons,
-            'nbBases' => count($nbBases),
-            'nbEvos' => $nbPokemons - count($nbBases)
-        );
-        if (isset($status)) {
-            if ($status == "delete") {
-                $context['status'] = "is-warning";
-                $context['message'] = "Le Pokemon a bien été supprimé !";
+        $isConnected = $session->get("isConnected", false);
+        if (!$isConnected) {
+            return $this->redirectToRoute("homepage");
+        } else {
+            $pokemons = $this->getDoctrine()->getRepository('AppBundle:RefPokemon')->findAll();
+            $context = array();
+            foreach($pokemons as $pkm) {
+                $data = array(
+                    'id' => $pkm->getId(),
+                    'nom' => $pkm->getNom()
+                );
+                $type = ucfirst($pkm->getType1()->getLibelle());
+                try {
+                    $data['type'] = $type . ' - ' . ucfirst($pkm->getType2()->getLibelle());
+                } catch (\Exception $e) {
+                    if ($e instanceof EntityNotFoundException) { // type2 does not exist
+                        $data['type'] = $type;
+                    }
+                }
+                array_push($context, $data);
             }
-            $status = $session->remove("status");
+            $nbPokemons = count($context);
+            $nbBases =  $this->getDoctrine()->getRepository('AppBundle:RefPokemon')->findByEvolution(false);
+            $session = $request->getSession();
+            $status = $session->get("status", null);
+            $context = array(
+                'pokemons' => $context,
+                'nbPokemons' => $nbPokemons,
+                'nbBases' => count($nbBases),
+                'nbEvos' => $nbPokemons - count($nbBases)
+            );
+            if (isset($status)) {
+                if ($status == "delete") {
+                    $context['status'] = "is-warning";
+                    $context['message'] = "Le Pokemon a bien été supprimé !";
+                }
+                $status = $session->remove("status");
+            }
+            return $this->render('refpokemon/index.html.twig', $context);
         }
-        return $this->render('refpokemon/index.html.twig', $context);
     }
 
     /**
@@ -70,43 +76,54 @@ class RefPokemonController extends Controller
      */
     public function newAction(Request $request)
     {
-        $refPokemon = new RefPokemon();
-        $form = $this->createForm('AppBundle\Form\RefPokemonType', $refPokemon);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $refPokemon->setEvolution(($request->request->get("isEvo") == '0') ? false : true);
-            $refPokemon->setStarter(($request->request->get("isStarter") == '0') ? false : true);
-            $dump = new RefElementaryType();
-            $dump->setId(0);
-            $dump->setLibelle('Aucun');
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($dump);
-            $refPokemon->setType2(($refPokemon->getType2() !== null) ? $refPokemon->getType2() : $dump);
-            $em->persist($refPokemon);
-            $em->flush();
-            $em->remove($dump);
-            $em->flush();
-            return $this->redirectToRoute('refpokemon_show', array('id' => $refPokemon->getId()));
+        $session = $request->getSession();
+        $isConnected = $session->get("isConnected", false);
+        if (!$isConnected) {
+            return $this->redirectToRoute("homepage");
+        } else {
+            $refPokemon = new RefPokemon();
+            $form = $this->createForm('AppBundle\Form\RefPokemonType', $refPokemon);
+            $form->handleRequest($request);
+            if ($form->isSubmitted() && $form->isValid()) {
+                $refPokemon->setNom(ucfirst($refPokemon->getNom()));
+                $refPokemon->setEvolution(($request->request->get("isEvo") == '0') ? false : true);
+                $refPokemon->setStarter(($request->request->get("isStarter") == '0') ? false : true);
+                $dump = new RefElementaryType();
+                $dump->setId(0);
+                $dump->setLibelle('Aucun');
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($dump);
+                $refPokemon->setType2(($refPokemon->getType2() !== null) ? $refPokemon->getType2() : $dump);
+                $em->persist($refPokemon);
+                $em->flush();
+                $em->remove($dump);
+                $em->flush();
+                return $this->redirectToRoute('refpokemon_show', array('id' => $refPokemon->getId()));
+            }
+            return $this->render('refpokemon/new.html.twig', array(
+                'refPokemon' => $refPokemon,
+                'form' => $form->createView(),
+            ));
         }
-
-        return $this->render('refpokemon/new.html.twig', array(
-            'refPokemon' => $refPokemon,
-            'form' => $form->createView(),
-        ));
     }
 
     /**
      * @Route("/stats", name="refpokemon_stats")
      * @Method("GET")
      */
-    public function statsAction()
+    public function statsAction(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
-        $types = $em->getRepository('AppBundle:RefPokemon')->findStats();
-        return $this->render('refpokemon/stats.html.twig', array(
-            'types' => $types
-        ));
+        $session = $request->getSession();
+        $isConnected = $session->get("isConnected", false);
+        if (!$isConnected) {
+            return $this->redirectToRoute("homepage");
+        } else {
+            $em = $this->getDoctrine()->getManager();
+            $types = $em->getRepository('AppBundle:RefPokemon')->findStats();
+            return $this->render('refpokemon/stats.html.twig', array(
+                'types' => $types
+            ));
+        }
     }
 
     /**
@@ -115,24 +132,30 @@ class RefPokemonController extends Controller
      * @Route("/{id}", name="refpokemon_show")
      * @Method("GET")
      */
-    public function showAction(RefPokemon $refPokemon)
+    public function showAction(Request $request, RefPokemon $refPokemon)
     {
-        $res = array(
-            'id' => $refPokemon->getId(),
-            'nom' => $refPokemon->getNom(),
-            'evolution' => $refPokemon->getEvolution()
-        );
-        $type = ucfirst($refPokemon->getType1()->getLibelle());
-        try {
-            $res['type'] = $type . ' - ' . ucfirst($refPokemon->getType2()->getLibelle());
-        } catch (\Exception $e) {
-            if ($e instanceof EntityNotFoundException) { // type2 does not exist
-                $res['type'] = $type;
+        $session = $request->getSession();
+        $isConnected = $session->get("isConnected", false);
+        if (!$isConnected) {
+            return $this->redirectToRoute("homepage");
+        } else {
+            $res = array(
+                'id' => $refPokemon->getId(),
+                'nom' => $refPokemon->getNom(),
+                'evolution' => $refPokemon->getEvolution()
+            );
+            $type = ucfirst($refPokemon->getType1()->getLibelle());
+            try {
+                $res['type'] = $type . ' - ' . ucfirst($refPokemon->getType2()->getLibelle());
+            } catch (\Exception $e) {
+                if ($e instanceof EntityNotFoundException) { // type2 does not exist
+                    $res['type'] = $type;
+                }
             }
+            return $this->render('refpokemon/show.html.twig', array(
+                'refPokemon' => $res
+            ));
         }
-        return $this->render('refpokemon/show.html.twig', array(
-            'refPokemon' => $res
-        ));
     }
 
     /**
@@ -168,12 +191,18 @@ class RefPokemonController extends Controller
      */
     public function deleteAction(Request $request, RefPokemon $refPokemon)
     {
-        $em = $this->getDoctrine()->getManager();
-        $em->remove($refPokemon);
-        $em->flush();
         $session = $request->getSession();
-        $session->set('status', 'delete');
-        return $this->redirectToRoute('refpokemon_index');
+        $isConnected = $session->get("isConnected", false);
+        if (!$isConnected) {
+            return $this->redirectToRoute("homepage");
+        } else {
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($refPokemon);
+            $em->flush();
+            $session = $request->getSession();
+            $session->set('status', 'delete');
+            return $this->redirectToRoute('refpokemon_index');
+        }
     }
 
     /**

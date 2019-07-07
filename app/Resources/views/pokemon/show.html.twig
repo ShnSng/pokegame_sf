@@ -1,60 +1,111 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}
+    Détails
+{% endblock %}
+
 {% block body %}
-    <h1>Pokemon</h1>
+   <div class="content">
+        <section class="hero is-bold is-light">
+            <div class="hero-body">
+                <div class="container">
+                    <h1 class="title">Détails</h1>
+                    <h2 class="subtitle">Apprenez en plus sur le Pokemon sélectionné</h2>
+                </div>
+            </div>
+        </section>
+        <div class="container">
+            <div class="card">
+                <div class="card-content">
+                    <p>Nom : {{ pokemon.nom }}</p>
+                    <p>Sexe : <span class="icon is-small is-left">
+                        {% if pokemon.sexe == "M" %}
+                            <i class="fas fa-mars"></i>
+                        {% else %}
+                            <i class="fas fa-venus"></i>
+                        {% endif %}
+                    </span></p>
+                    <p>Type : {{ pokemon.type }}</p>
+                    <p>Dresseur origine : {{ pokemon.do }}</p>
+                    <p>Niveau : {{ pokemon.niveau }}</p>
+                    <p>Points exp : {{ pokemon.xp }}</p>
+                    {% if pokemon.training != 0 %}
+                        <p>Dernier entraînement : {{ pokemon.training|date("d/m/Y") }}</p>
+                    {% endif %}
+                    {% if pokemon.aVendre %}
+                        <p>Prix de vente : {{ pokemon.prix }}<span class="icon is-small"><i class="fas fa-coins"></i></span></p>
+                    {% endif %}
+                    <p class="btn-details">
+                        {% if pokemon.training < (date().timestamp - 60 * 60) and not pokemon.aVendre %}
+                            <button class="button is-danger modal-button" data-target="modalSell">Vendre</button>
+                            <button class="button is-primary modal-button" data-target="modalCatch">Chasser</button>
+                            <a href="{{ path('pokemon_train', { id: pokemon.id }) }}" class="button is-warning">Entraîner</a>
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="modalSell" class="modal">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+            <header class="modal-card-head">
+                <p class="modal-card-title">Vente</p>
+                <button class="delete" aria-label="close"></button>
+            </header>
+            <form action="{{ path('pokemon_sell', { id: pokemon.id }) }}" method="POST">
+                <section class="modal-card-body">
+                    <div class="field">
+                        <label class="label">Prix de vente</label>
+                        <div class="control">
+                            <input class="input" name="price" type="number" placeholder="Prix de vente">
+                        </div>
+                    </div>
+                </section>
+                <footer class="modal-card-foot">
+                    <button type="submit" class="button is-danger">Vendre</button>
+                    <button type="button" class="button">Cancel</button>
+                </footer>
+            </form>
+        </div>
+    </div>
 
-    <table>
-        <tbody>
-            <tr>
-                <th>Avendre</th>
-                <td>{% if pokemon.aVendre %}Yes{% else %}No{% endif %}</td>
-            </tr>
-            <tr>
-                <th>Datedernierentrainement</th>
-                <td>{{ pokemon.dateDernierEntrainement }}</td>
-            </tr>
-            <tr>
-                <th>Dresseurid</th>
-                <td>{{ pokemon.dresseurId }}</td>
-            </tr>
-            <tr>
-                <th>Niveau</th>
-                <td>{{ pokemon.niveau }}</td>
-            </tr>
-            <tr>
-                <th>Prix</th>
-                <td>{{ pokemon.prix }}</td>
-            </tr>
-            <tr>
-                <th>Refpokemonid</th>
-                <td>{{ pokemon.refPokemonId }}</td>
-            </tr>
-            <tr>
-                <th>Sexe</th>
-                <td>{{ pokemon.sexe }}</td>
-            </tr>
-            <tr>
-                <th>Xp</th>
-                <td>{{ pokemon.xp }}</td>
-            </tr>
-            <tr>
-                <th>Id</th>
-                <td>{{ pokemon.id }}</td>
-            </tr>
-        </tbody>
-    </table>
+    <div id="modalCatch" class="modal">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+            <header class="modal-card-head">
+                <p class="modal-card-title">Partir en chasse</p>
+                <button class="delete" aria-label="close"></button>
+            </header>
+            <form action="{{ path('pokemon_catch', { id: pokemon.id }) }}" method="POST">
+                <section class="modal-card-body">
+                    {% if places is defined and places is not empty %}
+                        <div class="field">
+                            <label class="label">Lieu de chasse</label>
+                            <div class="control">
+                                <span class="select is-fullwidth">
+                                    <select name="place" required="required">
+                                        {% for place in places %}
+                                            <option value="{{ place.id }}">{{ place.label|capitalize }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </span>
+                            </div>
+                        </div>
+                    {% else %}
+                        <p>Il n'y a de lieu de chasse</p>
+                    {% endif %}
+                </section>
+                <footer class="modal-card-foot">
+                    <button type="submit" class="button is-primary">Capturer</button>
+                    <button type="button" class="button">Cancel</button>
+                </footer>
+            </form>
+        </div>
+    </div>
+{% endblock %}
 
-    <ul>
-        <li>
-            <a href="{{ path('pokemon_index') }}">Back to the list</a>
-        </li>
-        <li>
-            <a href="{{ path('pokemon_edit', { 'id': pokemon.id }) }}">Edit</a>
-        </li>
-        <li>
-            {{ form_start(delete_form) }}
-                <input type="submit" value="Delete">
-            {{ form_end(delete_form) }}
-        </li>
-    </ul>
+{% block javascripts %}
+    <script src="{{ asset('js/modal.js') }}" type="text/javascript"></script>
 {% endblock %}

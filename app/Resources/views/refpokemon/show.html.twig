@@ -21,7 +21,7 @@
                     <p>Nom : {{ refPokemon.nom }}</p>
                     <p>Type : {{ refPokemon.type }}</p>
                     <p>{{ (refPokemon.evolution) ? 'est une évolution' : 'est un Pokemon de base' }}</p>
-                    <p class="btn-delete"><a href="{{ path('refpokemon_delete', { id: refPokemon.id }) }}" class="button is-warning">Supprimer</a></p>
+                    <p class="btn-details"><a href="{{ path('refpokemon_delete', { id: refPokemon.id }) }}" class="button is-warning">Supprimer</a></p>
                 </div>
             </div>
         </div>

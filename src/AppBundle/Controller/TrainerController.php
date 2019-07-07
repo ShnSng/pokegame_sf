@@ -6,7 +6,9 @@ use AppBundle\Entity\Pokemon;
 use AppBundle\Entity\Trainer;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
+use AppBundle\Service\Utils;
 
 /**
  * Trainer controller.
@@ -99,7 +101,7 @@ class TrainerController extends Controller
      * @Route("/inscription", name="inscription")
      * @Method({"GET", "POST"})
      */
-    public function inscriptionAction(Request $request)
+    public function inscriptionAction(Request $request, Utils $utils)
     {
         $session = $request->getSession();
         $isConnected = $session->get("isConnected", false);
@@ -129,19 +131,17 @@ class TrainerController extends Controller
                         $trainer->setStarterId($starter);
                         $em->persist($trainer);
                         $em->flush();
-
                         $pokemon = new Pokemon();
                         $pokemon->setAVendre(false);
                         $pokemon->setDateDernierEntrainement(0);
-                        $pokemon->setDresseurId($trainer->getId());
+                        $pokemon->setDresseur($trainer);
                         $pokemon->setNiveau(5);
                         $pokemon->setPrix(0);
-                        $pokemon->setRefPokemonId($starter);
+                        $pokemon->setRefPokemon($em->getRepository("AppBundle:RefPokemon")->findOneById($starter));
                         $pokemon->setSexe((rand(0, 1) == 0) ? 'M' : 'F');
-                        $pokemon->setXp(0);
+                        $pokemon->setXp($utils->getXp($pokemon->getNiveau(), $pokemon->getRefPokemon()->getTypeCourbeNiveau()));
                         $em->persist($pokemon);
                         $em->flush();
-
                         $context['status'] = "is-success";
                         $context['message'] = "Le dresseur a bien été enregistré dans le jeu";
                     } else {

@@ -21,4 +21,20 @@ class RefPokemonRepository extends EntityRepository
         }
         return $stats;
     }
+
+    public function findRandomByPlace(string $place)
+    {
+        $place = $this->getEntityManager()->getRepository('AppBundle:RefPlace')->findOneById($place);
+        $res = $this->getEntityManager()->createQuery('SELECT e FROM AppBundle:RefETypePlace e WHERE e.idPlace = ?1')
+            ->setParameter(1, $place->getId())
+            ->getResult();
+        $type = rand(0, count($res) - 1);
+        $type = $res[$type];
+        $res = $this->getEntityManager()->createQuery('SELECT p FROM AppBundle:RefPokemon p WHERE p.type1 = ?1 OR p.type2 = ?1')
+            ->setParameter(1, $type->getIdType())
+            ->getResult();
+        $pokemon = rand(0, count($res) - 1);
+        $pokemon = $res[$pokemon];
+        return $pokemon;
+    }
 }

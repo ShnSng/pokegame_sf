@@ -1,53 +1,42 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}
+    Mes Pokemons
+{% endblock %}
+
 {% block body %}
-    <h1>Pokemons list</h1>
-
-    <table>
-        <thead>
-            <tr>
-                <th>Avendre</th>
-                <th>Datedernierentrainement</th>
-                <th>Dresseurid</th>
-                <th>Niveau</th>
-                <th>Prix</th>
-                <th>Refpokemonid</th>
-                <th>Sexe</th>
-                <th>Xp</th>
-                <th>Id</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for pokemon in pokemons %}
-            <tr>
-                <td><a href="{{ path('pokemon_show', { 'id': pokemon.id }) }}">{{ pokemon.aVendre }}</a></td>
-                <td>{{ pokemon.dateDernierEntrainement }}</td>
-                <td>{{ pokemon.dresseurId }}</td>
-                <td>{{ pokemon.niveau }}</td>
-                <td>{{ pokemon.prix }}</td>
-                <td>{{ pokemon.refPokemonId }}</td>
-                <td>{{ pokemon.sexe }}</td>
-                <td>{{ pokemon.xp }}</td>
-                <td>{{ pokemon.id }}</td>
-                <td>
-                    <ul>
-                        <li>
-                            <a href="{{ path('pokemon_show', { 'id': pokemon.id }) }}">show</a>
-                        </li>
-                        <li>
-                            <a href="{{ path('pokemon_edit', { 'id': pokemon.id }) }}">edit</a>
-                        </li>
-                    </ul>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-    <ul>
-        <li>
-            <a href="{{ path('pokemon_new') }}">Create a new pokemon</a>
-        </li>
-    </ul>
+    <div class="content">
+        <section class="hero is-bold is-warning">
+            <div class="hero-body">
+                <div class="container">
+                    <h1 class="title">Pokemons</h1>
+                    <h2 class="subtitle">Consultez la liste de vos Pokemons</h2>
+                </div>
+            </div>
+        </section>
+        <div class="container">
+            {% if pokemons is defined %}
+                {% if pokemons is not empty %}
+                    <table class="table is-hoverable">
+                        <thead>
+                            <tr>
+                                <th>Nom</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for pkm in pokemons %}
+                            <tr>
+                                <td>{{ pkm.refPokemon.nom }}</td>
+                                <td><a class="btn btn-primary" href="{{ path('pokemon_show', { id: pkm.id }) }}">Voir la fiche détaillée</a></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <p>Vous ne possédez aucun Pokemon</p>
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
 {% endblock %}

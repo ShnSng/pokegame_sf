@@ -27,11 +27,10 @@ class Pokemon
     private $dateDernierEntrainement;
 
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="dresseur_id", type="integer", nullable=false)
+     * @ORM\OneToOne(targetEntity="Trainer")
+     * @ORM\JoinColumn(name="dresseur_id", referencedColumnName="id")
      */
-    private $dresseurId;
+    private $dresseur;
 
     /**
      * @var integer
@@ -48,11 +47,10 @@ class Pokemon
     private $prix;
 
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="ref_pokemon_id", type="integer", nullable=false)
+     * @ORM\OneToOne(targetEntity="RefPokemon")
+     * @ORM\JoinColumn(name="ref_pokemon_id", referencedColumnName="id")
      */
-    private $refPokemonId;
+    private $refPokemon;
 
     /**
      * @var string
@@ -128,25 +126,25 @@ class Pokemon
     }
 
     /**
-     * Get the value of dresseurId
+     * Get the value of dresseur
      *
      * @return  integer
      */ 
-    public function getDresseurId()
+    public function getDresseur()
     {
-        return $this->dresseurId;
+        return $this->dresseur;
     }
 
     /**
-     * Set the value of dresseurId
+     * Set the value of dresseur
      *
-     * @param  integer  $dresseurId
+     * @param  integer  $dresseur
      *
      * @return  self
      */ 
-    public function setDresseurId($dresseurId)
+    public function setDresseur($dresseur)
     {
-        $this->dresseurId = $dresseurId;
+        $this->dresseur = $dresseur;
 
         return $this;
     }
@@ -200,25 +198,25 @@ class Pokemon
     }
 
     /**
-     * Get the value of refPokemonId
+     * Get the value of refPokemon
      *
      * @return  integer
      */ 
-    public function getRefPokemonId()
+    public function getRefPokemon()
     {
-        return $this->refPokemonId;
+        return $this->refPokemon;
     }
 
     /**
-     * Set the value of refPokemonId
+     * Set the value of refPokemon
      *
-     * @param  integer  $refPokemonId
+     * @param  integer  $refPokemon
      *
      * @return  self
      */ 
-    public function setRefPokemonId($refPokemonId)
+    public function setRefPokemon($refPokemon)
     {
-        $this->refPokemonId = $refPokemonId;
+        $this->refPokemon = $refPokemon;
 
         return $this;
     }
