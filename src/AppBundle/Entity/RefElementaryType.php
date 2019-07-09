@@ -47,7 +47,7 @@ class RefElementaryType
      *
      * @return  self
      */ 
-    public function setLibelle(string $libelle)
+    public function setLibelle($libelle)
     {
         $this->libelle = $libelle;
 

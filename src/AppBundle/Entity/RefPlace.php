@@ -47,7 +47,7 @@ class RefPlace
      *
      * @return  self
      */ 
-    public function setLabel(string $label)
+    public function setLabel($label)
     {
         $this->label = $label;
 

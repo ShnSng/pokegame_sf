@@ -94,7 +94,7 @@ class Pokemon
      *
      * @return  self
      */ 
-    public function setAVendre(bool $aVendre)
+    public function setAVendre($aVendre)
     {
         $this->aVendre = $aVendre;
 
@@ -238,7 +238,7 @@ class Pokemon
      *
      * @return  self
      */ 
-    public function setSexe(string $sexe)
+    public function setSexe($sexe)
     {
         $this->sexe = $sexe;
 

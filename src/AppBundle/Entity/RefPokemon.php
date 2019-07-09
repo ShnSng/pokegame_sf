@@ -80,7 +80,7 @@ class RefPokemon
      *
      * @return  self
      */ 
-    public function setEvolution(bool $evolution)
+    public function setEvolution($evolution)
     {
         $this->evolution = $evolution;
 
@@ -104,7 +104,7 @@ class RefPokemon
      *
      * @return  self
      */ 
-    public function setNom(string $nom)
+    public function setNom($nom)
     {
         $this->nom = $nom;
 
@@ -128,7 +128,7 @@ class RefPokemon
      *
      * @return  self
      */ 
-    public function setStarter(bool $starter)
+    public function setStarter($starter)
     {
         $this->starter = $starter;
 
@@ -200,7 +200,7 @@ class RefPokemon
      *
      * @return  self
      */ 
-    public function setTypeCourbeNiveau(string $typeCourbeNiveau)
+    public function setTypeCourbeNiveau($typeCourbeNiveau)
     {
         $this->typeCourbeNiveau = $typeCourbeNiveau;
 
